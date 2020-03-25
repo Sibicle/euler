@@ -6,4 +6,4 @@ gem "pry"
 gem "pry-doc"
 gem "awesome_print"
 
-gem "numbers_in_words"
+gem "humanize"
