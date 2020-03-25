@@ -7,3 +7,4 @@ gem "pry-doc"
 gem "awesome_print"
 
 gem "humanize"
+gem "benchmark"

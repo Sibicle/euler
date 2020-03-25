@@ -1,29 +1,35 @@
 #!/usr/bin/env ruby
 
 require "optparse"
+require 'date'
 
 require "bundler/setup"
 Bundler.require
 
 Dir["./src/*.rb"].each {|file| require file }
 
+NEWLINE = "\n"
 options = {}
+verbose = false
 
-opt_parser = OptionParser.new do |opt|
+OptionParser.new do |opt|
   opt.banner = "Usage: euler PROBLEM [ARGUMENTS]"
 
   opt.on("-h","--help","help") do
     puts opt_parser
   end
-end
 
-opt_parser.parse!
+  opt.on("-v","--verbose","verbose") do
+    verbose = true;
+  end
+end.parse!
 
-problem = ARGV[0].to_i.humanize.capitalize
-cmd = problem + ".run"
+problem  = ARGV[0].to_i.humanize.capitalize
 
 begin
-  eval cmd
+  elapsed = Benchmark.measure do
+    eval problem + ".run"
+  end
 rescue NameError
   STDERR.puts "no such class #{problem}."
   exit 1
@@ -31,5 +37,8 @@ rescue NoMethodError
   STDERR.puts "no 'run' method in #{problem} class."
   exit 1
 end
+
+puts
+puts elapsed if verbose
 
 exit 0
