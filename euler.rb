@@ -19,9 +19,17 @@ end
 
 opt_parser.parse!
 
-case
-when "1"
-  One.run
-else
-  puts "no such problem exists."
+problem = ARGV[0].to_i.humanize.capitalize
+cmd = problem + ".run"
+
+begin
+  eval cmd
+rescue NameError
+  STDERR.puts "no such class #{problem}."
+  exit 1
+rescue NoMethodError
+  STDERR.puts "no 'run' method in #{problem} class."
+  exit 1
 end
+
+exit 0
