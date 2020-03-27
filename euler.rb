@@ -26,16 +26,9 @@ end.parse!
 
 problem  = ARGV[0].to_i.humanize.capitalize
 
-begin
-  elapsed = Benchmark.measure do
-    eval problem + ".run"
-  end
-rescue NameError
-  STDERR.puts "no such class #{problem}."
-  exit 1
-rescue NoMethodError
-  STDERR.puts "no 'run' method in #{problem} class."
-  exit 1
+
+elapsed = Benchmark.measure do
+  eval problem + ".run"
 end
 
 puts
