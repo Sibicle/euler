@@ -2,17 +2,11 @@
 
 require "optparse"
 require "date"
+
 require "bundler/setup"
 Bundler.require
 
-require_all Problem
-
-def class_exists?(class_name)
-  klass = Module.const_get(class_name)
-  return klass.is_a?(Class)
-rescue NameError
-  return false
-end
+Dir["./src/*.rb"].each {|file| require file }
 
 NEWLINE = "\n"
 options = {}
@@ -30,14 +24,11 @@ OptionParser.new do |opt|
   end
 end.parse!
 
-problem = ARGV[0].to_i.humanize.capitalize
+problem  = ARGV[0].to_i.humanize.capitalize
+
 
 elapsed = Benchmark.measure do
-  abort "no such problem" unless class_exists problem
-  klass = Object.const_get(problem)
-
-  # abort "problem has no 'run' function" unless klass.const_get('run')
-  klass.run
+  public_send problem + ".run"
 end
 
 puts
